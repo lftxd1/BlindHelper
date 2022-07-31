@@ -1,0 +1,14 @@
+{
+    "show_video": true,
+    "use_imagefile": true,
+    "min_upload_seconds": 3.0,
+    "min_motion_frames": 4,
+    "camera_warmup_time": 2.5,
+    "delta_thresh": 5,
+    "resolution": [640, 480],
+    "fps": 16,
+    "min_area": 5000,
+                   "use_socket": true,
+                   "server_address": "192.168.1.2",
+                   "server_port": 9000
+}
