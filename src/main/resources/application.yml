@@ -1,0 +1,31 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+
+
+mybatis:
+  type-aliases-package: com.wms.model
+  mapper-locations: classpath:mapper/*.xml
+
+
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/warehouse?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+  profiles.active: aeolian
+  ## MULTIPART (MultipartProperties)
+  # 开启 multipart 上传功能
+  servlet.multipart.enabled: true
+  # 文件写入磁盘的阈值
+  servlet.multipart.file-size-threshold: 1KB
+  # 最大文件大小
+  servlet.multipart.max-file-size: 200MB
+  # 最大请求大小
+  servlet.multipart.max-request-size: 215MB
+
+
+
