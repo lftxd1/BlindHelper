@@ -20,8 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('GetSpecifiedClassNews/', MouleOne.GetSpecifiedClassNews),
     path('GetSpecifiedNews/', MouleOne.GetSpecifiedNews),
-    path("TxtToMp3/",MouleOne.TxtToMp3),
-    path("GetTiku/",MouleOne.GetTiku),
     path("IdentifyText/",MouleOne.IdentifyText),
     path("IdentifyAudio/",MouleOne.IdentifyAudio),
     path("Search/",MouleOne.Search),

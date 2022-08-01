@@ -4,31 +4,42 @@ import os
 import glob
 import random
 import json
+from . import MobileClound
 import requests, base64
+import wave
+import difflib
+from pydub import AudioSegment
 from MouleOne.models import *
 from django.forms.models import model_to_dict
-from MouleOne import MobileClound
+
+
+def read_wav_bytes(filename: str) -> tuple:
+    '''
+    读取一个wav文件，返回声音信号的时域谱矩阵和播放时间
+    '''
+    wav = wave.open(filename, "rb")  # 打开一个wav格式的声音文件流
+    num_frame = wav.getnframes()  # 获取帧数
+    num_channel = wav.getnchannels()  # 获取声道数
+    framerate = wav.getframerate()  # 获取帧速率
+    num_sample_width = wav.getsampwidth()  # 获取实例的比特宽度，即每一帧的字节数
+    str_data = wav.readframes(num_frame)  # 读取全部的帧
+    wav.close()  # 关闭流
+    return str_data, framerate, num_channel, num_sample_width
 
 
 def GetSpecifiedClassNews(request):
-    # 主要的时间是卡在需要加载所有的类别新闻，所以只需要不加载全部，先随机选再判断选的合不合适即可。
     ClassesName = request.GET.get('ClassesName')
-    num = request.GET.get("num")
-    if num == None:
-        num = 10
-    else:
-        num = int(num)
+    articles = list(Article.objects.filter(classes=ClassesName))
     res = []
-    while True:
-        id = random.randint(1, 836074)
-        article = Article.objects.get(id=id)
-        article = model_to_dict(article)
-        article['content'] = ''
-        if article['classes'] == ClassesName or ClassesName=="推荐":
-            res.append(article)
-        if len(res) == num:
-            break
+    for i in range(10):
+        index = random.randint(1, len(articles) - 10)
+        t = model_to_dict(articles[index])
+        t["content"] = ""
+        res.append(t)
     return HttpResponse(json.dumps(res, ensure_ascii=False))
+
+
+from MouleOne.chatService import push
 
 
 def GetSpecifiedNews(request):
@@ -47,11 +58,11 @@ def GetNewsById(request):
 
 
 def GetIndexNews(request):
-    num = request.GET.get("num")
-    if num == None:
-        num = 10
+    num=request.GET.get("num")
+    if num==None:
+        num=10
     else:
-        num = int(num)
+        num=int(num)
     res = []
     for i in range(num):
         id = random.randint(1, 836074)
@@ -59,8 +70,21 @@ def GetIndexNews(request):
         article = model_to_dict(article)
         article['content'] = ''
         res.append(article)
-
+    article = model_to_dict(Article.objects.get(id=2))
+    res[0]=article
     return HttpResponse(json.dumps(res, ensure_ascii=False))
+
+
+def TxtToMp3(request):
+    text = request.GET.get("text")
+    mp3 = MobileClound.TxtToMp3(text)
+    return HttpResponse(mp3)
+
+
+def GetTiku(request):
+    with open("毛泽东思想和中国特色社会主义理论体系概论题库.json", 'r', encoding='utf-8') as f:
+        tiku = json.loads(f.read())
+        return HttpResponse(json.dumps(tiku))
 
 
 def IdentifyText(request):
@@ -72,6 +96,29 @@ def IdentifyText(request):
     destination.close()
     res = MobileClound.mobileCloudText(path)
     return HttpResponse(res)
+
+
+import pydub
+import io
+
+
+def mp3_to_wav(mp3_path, wav_path):
+    with open(mp3_path, 'rb') as fh:
+        data = fh.read()
+
+    aud = io.BytesIO(data)
+    sound = pydub.AudioSegment.from_file(aud, format='mp3')
+    raw_data = sound._data
+
+    size = len(raw_data)
+    f = wave.open(wav_path, 'wb')
+    f.setnchannels(1)
+    f.setsampwidth(2)
+    f.setframerate(16000)
+    f.setnframes(size)
+    f.writeframes(raw_data)
+    f.close()
+    return wav_path
 
 
 def IdentifyAudio(request):
