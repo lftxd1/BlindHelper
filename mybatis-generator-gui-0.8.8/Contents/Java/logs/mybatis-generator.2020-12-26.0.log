@@ -1,2 +1,0 @@
-[INFO] [11:18:01.530] [JavaFX Application Thread] [] com.zzg.mybatis.generator.util.ConnectionManager.getConnection:20 --> database FilePath :/Users/owen/workspace/owen/mybatis-generator-gui/target/jfx/native/mybatis-generator-gui-0.8.8-SNAPSHOT.app/Contents/Java/./config/sqlite3.db
-[INFO] [11:18:21.096] [JavaFX Application Thread] [] com.zzg.mybatis.generator.util.ConnectionManager.getConnection:20 --> database FilePath :/Users/owen/workspace/owen/mybatis-generator-gui/target/jfx/native/mybatis-generator-gui-0.8.8-SNAPSHOT.app/Contents/Java/./config/sqlite3.db
