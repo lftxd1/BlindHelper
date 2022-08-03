@@ -29,7 +29,8 @@ def GetSpecifiedClassNews(request):
         if len(res) == num:
             break
     return HttpResponse(json.dumps(res, ensure_ascii=False))
-
+def Index(request):
+    return render(request,"index.html")
 
 def GetSpecifiedNews(request):
     ID = request.GET.get('ID')

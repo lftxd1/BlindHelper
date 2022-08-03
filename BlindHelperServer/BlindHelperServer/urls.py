@@ -24,5 +24,6 @@ urlpatterns = [
     path("IdentifyAudio/",MouleOne.IdentifyAudio),
     path("Search/",MouleOne.Search),
     path("GetNewsById/",MouleOne.GetNewsById),
-    path("GetIndexNews/",MouleOne.GetIndexNews)
+    path("GetIndexNews/",MouleOne.GetIndexNews),
+    path("",MouleOne.Index)
 ]
